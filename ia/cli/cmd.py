@@ -16,6 +16,7 @@ from ia import __version__
 from ia.graph import UndirectedGraph
 from ia.graph.algorithm import TraversalAlgorithm, TraversalResult
 from ia.graph.parser import parse_and_transform
+from ia.maze.maze import Maze
 from ia.tree.utils import print_tree
 
 
@@ -23,6 +24,7 @@ def run():
     """Configure and execute the CLI."""
     app = typer.Typer(pretty_exceptions_show_locals=False)
     app.command("uninformed")(uninformed)
+    app.command("informed")(informed)
     # This callback is needed to force typer to use
     # subcommands even when there is only one command.
     app.callback()(lambda: None)
@@ -141,6 +143,15 @@ def uninformed(
     print_result(graph, start, end, algorithm, result, file=output_stream)
     if preview:
         print_tree(result.tree)
+
+
+def informed():
+    """Traverse a maze using an informed search algorithm."""
+    console = Console()
+    maze = Maze(rows=10, cols=10)
+    console.print(maze)
+    console.print("\nInformed search not implemented yet.", style="red bold")
+    raise typer.Exit(1)
 
 
 def preview(
