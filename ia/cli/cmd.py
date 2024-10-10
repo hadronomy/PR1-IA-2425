@@ -150,6 +150,7 @@ def informed():
     console = Console()
     maze = Maze(rows=10, cols=10)
     console.print(maze)
+    console.print("\nMaze traversal not implemented yet.", style="red bold")
     console.print("\nInformed search not implemented yet.", style="red bold")
     raise typer.Exit(1)
 

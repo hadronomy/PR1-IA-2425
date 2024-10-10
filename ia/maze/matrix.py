@@ -118,13 +118,15 @@ class Matrix:
 
     def __iter__(self):
         """Iterate over the matrix."""
-        for row in self.__data:
-            for col in row:
-                self.__data[row][col] = self.__default
+        yield from self.__data
 
     def __str__(self) -> str:
         """Return the matrix as a string."""
-        return "\n".join(str(row) for row in self.__data)
+        horizontal_border = "+" + "-" * (self.__cols * 3 + (self.__cols - 1)) + "+"
+        rows_str = "\n".join(
+            "| " + " ".join(f"{item:2}" for item in row) + " |" for row in self.__data
+        )
+        return f"{horizontal_border}\n{rows_str}\n{horizontal_border}"
 
     def __repr__(self) -> str:
         """Return the matrix as a string."""
