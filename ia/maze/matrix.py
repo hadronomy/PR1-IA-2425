@@ -45,7 +45,9 @@ class Matrix:
         """Get the default value."""
         return self.__default
 
-    def adjacent(self, row: int, col: int) -> dict[MatrixPosition, MatrixPosition]:
+    def adjacent(
+        self, row: int, col: int, offsets: list[MatrixPosition] = None
+    ) -> dict[MatrixPosition, MatrixPosition]:
         """Get the adjacent cells.
 
         Parameters
@@ -54,6 +56,9 @@ class Matrix:
                 The row of the cell.
             col : (int)
                 The column of the cell.
+            offsets : (list[MatrixPosition])
+                The offsets to check.
+                By default, it checks the 4 cardinal directions and the 4 diagonals.
 
         Returns
         -------
@@ -61,8 +66,19 @@ class Matrix:
                 Dictionary with the adjacent cells, where the key is the offset
                 and the value is the position.
         """
+        if offsets is None:
+            offsets = [
+                (0, 1),
+                (1, 0),
+                (0, -1),
+                (-1, 0),
+                (1, 1),
+                (1, -1),
+                (-1, 1),
+                (-1, -1),
+            ]
         adjacent: dict[MatrixPosition, MatrixPosition] = {}
-        for row_offset, col_offset in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
+        for row_offset, col_offset in offsets:
             new_row, new_col = row + row_offset, col + col_offset
             if 0 <= new_row < self.__rows and 0 <= new_col < self.__cols:
                 adjacent.update({(row_offset, col_offset): (new_row, new_col)})
