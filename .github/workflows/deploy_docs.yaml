@@ -1,0 +1,49 @@
+name: Deploy Sphinx Docs to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main # Change this to your default branch if it's not 'main'
+
+jobs:
+  build:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12"]
+        os: [ubuntu-latest]
+
+    steps:
+      - name: Generate GitHub token
+        uses: actions/create-github-app-token@v1
+        id: generate-token
+        with:
+          app-id: ${{ secrets.APP_ID }} # <-- GitHub App ID secret name
+          private-key: ${{ secrets.APP_PRIVATE_KEY }} # <-- GitHub App private key secret name
+      - uses: actions/checkout@v4
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install poetry
+        uses: abatilo/actions-poetry@v2
+      - name: Setup a local virtual environment (if no poetry.toml file)
+        run: |
+          poetry config virtualenvs.create true --local
+          poetry config virtualenvs.in-project true --local
+      - uses: actions/cache@v3
+        name: Define a cache for the virtual environment based on the dependencies lock file
+        with:
+          path: ./.venv
+          key: venv-${{ hashFiles('poetry.lock') }}
+      - name: Build Sphinx documentation
+        run: |
+          cd docs
+          make html
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ steps.generate-token.outputs.token }}
+          publish_dir: ./docs/build/html

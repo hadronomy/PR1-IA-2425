@@ -7,3 +7,5 @@ out*.txt
 *.dist
 *.bin
 output
+build
+_autosummary

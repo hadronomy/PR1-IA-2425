@@ -5,6 +5,8 @@ from dataclasses import dataclass
 
 
 class ExportConstants:  # noqa: D101
+    """Constants for representing the tree as a string."""
+
     DOWN_RIGHT = "\u250c"
     VERTICAL_RIGHT = "\u251c"
     VERTICAL_LEFT = "\u2524"
